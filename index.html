@@ -74,7 +74,7 @@
 
 
 <!--  SENTENCE GENERATOR PROJECT-->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -85,94 +85,191 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <!-- // <script src="main.js"></script> -->
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <button type="button" onclick="start()" data-toggle="modal" data-target="#myModal" class="btn btn-primary">Create Quote</button>
+  <!-- // <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  // <button type="button" onclick="start()" data-toggle="modal" data-target="#myModal" class="btn btn-primary">Create Quote</button> -->
 
 
   <!-- Modal -->
-  <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+  <!-- <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog"> -->
 
 
       <!-- Modal content-->
-      <div class="modal-content">
+      <!-- <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title"> head Header</h4>
         </div>
         <div class="modal-body"><button id="one" class="wordbutton">bde</button><button id="two" class="wordbutton">gg</button><button id="three" class="wordbutton">yy</button><button id="four" class="wordbutton">77</button>
           <!-- <p>Some text in the mdl.</p> -->
-        </div>
-        <div class="modal-footer">
+        <!-- </div>
+        <div class="modal-footer"> -->
           <!--<button onclick="next()" type="button" class="btn btn-default">Next</button>-->
           <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-        </div>
+        <!-- </div>
       </div>
 
 
     </div>
 <p id="ghost"></p>
-  </div>
+  </div> -->
+  <!-- <-- <script type="text/javascript"> -->
+  <!-- // var sentence;
+
+  // function makeNouns(argument) {
+  //   var nouns=["eggs", "bacon","waffle","toast","Stephen Hawking","Albert Einstein","God"]
+  //
+  //   //     $('.modal-body').text(sentence);
+  //   var random = Math.floor (Math.random()*6)
+  //   $('#one').text(nouns[random])
+  //   random = Math.floor (Math.random()*6)
+  //   $('#two').text(nouns[random])
+  //   random=Math.floor(Math.random()*6)
+  //   $('#three').text(nouns[random])
+  //   random=Math.floor(Math.random()*6)
+  //   $('#four').text(nouns[random])
+  //   return true;
+  //
+  // }
+  // var done =false;
+  // function makeAdjs(){
+  //   var adjectives=["cute","funny","mushy","light","impossible","annoying","yummy"]
+  //   var random = Math.floor (Math.random()*6)
+  //   $('#one').text(adjectives[random])
+  //   random = Math.floor (Math.random()*6)
+  //   $('#two').text(adjectives[random])
+  //   random=Math.floor(Math.random()*6)
+  //   $('#three').text(adjectives[random])
+  //   random=Math.floor(Math.random()*6)
+  //   $('#four').text(adjectives[random])
+  //   done =true;
+  // }
+  // var pickedNoun;
+  // function start(){
+  //   makeNouns();
+  //
+  // }
+  // function next(id){
+  //   // console.log("called");
+  //     if(!done){
+  //       pickedNoun= $('#one').text();
+  //       makeAdjs();
+  //       console.log(pickedNoun);
+  //     }
+  //     else{
+  //       var pickedAdj = $('#'+id).text();
+  //       console.log("done")
+  //       makeSentence(pickedAdj,pickedNoun);
+  //     }
+  // }
+  //   function makeSentence(adj,noun){
+  //     console.log("noun: "+noun+"adj: "+adj)
+  //     var placeholder = ["the","was","is","wasnt","cant","when"]
+  //     sentence= noun+" "+placeholder[Math.floor(Math.random()*5)]+" "+adj+" "+placeholder[Math.floor(Math.random()*5)]+" "+noun+" "+ placeholder[Math.floor(Math.random()*5)]+" "+adj
+  //     $("#ghost").text(sentence)
+  //   }
+  // $(".wordbutton").click(function() {
+  //   console.log(this.id);
+  //   next(this.id);
+  //
+  // }); -->
+  <!-- // </script>
+// </body>
+// </html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial scale=1">
+    <title></title>
+    <link rel="stylesheet" href="main.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+    <div class="container">
+      <div class="todo">
+        <ul class="todo-controls">
+          <li>
+            <span class="icon-add" id="new-task-button">Add</span>
+          </li>
+          <li class="right">
+            <span class="icon-settings"> Settings
+            </span>
+          </li>
+        </ul>
+        <ul id="todo-list">
+        </ul>
+      </div>
+    </div>
+  <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
   <script type="text/javascript">
-  // var sentence;
+  var firebaseRootUrl = "https://best-todo.firebaseio.com/";
+  var firebaseRoot = new Firebase(firebaseRootUrl)
+  var number=0;
+  function deleteTask(key) {
+   var taskURL = firebaseRootUrl + key;
+   var taskRef = new Firebase(firebaseRootUrl + key);
 
-  function makeNouns(argument) {
-    var nouns=["eggs", "bacon","waffle","toast","Stephen Hawking","Albert Einstein","God"]
+   taskRef.remove();
+ }
+  window.onload = function (){
 
-    //     $('.modal-body').text(sentence);
-    var random = Math.floor (Math.random()*6)
-    $('#one').text(nouns[random])
-    random = Math.floor (Math.random()*6)
-    $('#two').text(nouns[random])
-    random=Math.floor(Math.random()*6)
-    $('#three').text(nouns[random])
-    random=Math.floor(Math.random()*6)
-    $('#four').text(nouns[random])
-    return true;
+    var newTaskButton = document.getElementById("new-task-button")
+    var todolist = document.getElementById("todo-list")
+    function addNewTask(taskName, priority) {
 
-  }
-  var done =false;
-  function makeAdjs(){
-    var adjectives=["cute","funny","mushy","light","impossible","annoying","yummy"]
-    var random = Math.floor (Math.random()*6)
-    $('#one').text(adjectives[random])
-    random = Math.floor (Math.random()*6)
-    $('#two').text(adjectives[random])
-    random=Math.floor(Math.random()*6)
-    $('#three').text(adjectives[random])
-    random=Math.floor(Math.random()*6)
-    $('#four').text(adjectives[random])
-    done =true;
-  }
-  var pickedNoun;
-  function start(){
-    makeNouns();
-
-  }
-  function next(id){
-    // console.log("called");
-      if(!done){
-        pickedNoun= $('#one').text();
-        makeAdjs();
-        console.log(pickedNoun);
+      if(number<priority){
+        number=priority
       }
-      else{
-        var pickedAdj = $('#'+id).text();
-        console.log("done")
-        makeSentence(pickedAdj,pickedNoun);
-      }
-  }
-    function makeSentence(adj,noun){
-      console.log("noun: "+noun+"adj: "+adj)
-      var placeholder = ["the","was","is","wasnt","cant","when"]
-      sentence= noun+" "+placeholder[Math.floor(Math.random()*5)]+" "+adj+" "+placeholder[Math.floor(Math.random()*5)]+" "+noun+" "+ placeholder[Math.floor(Math.random()*5)]+" "+adj
-      $("#ghost").text(sentence)
-    }
-  $(".wordbutton").click(function() {
-    console.log(this.id);
-    next(this.id);
+      var li = document.createElement("li");
 
+      var div = document.createElement("div")
+      div.innerHTML=priority;
+      li.appendChild(div);
+      todolist.appendChild(li)
+
+      var span = document.createElement("span")
+      span.innerHTML = taskName;
+      li.appendChild(span);
+
+      var img = document.createElement('img');
+      img.src = "http://i.imgur.com/BtLxCD6.png"
+      img.setAttribute("class","delete");
+      li.appendChild(img)
+
+      img.onclick = function() {
+        var parentLiElement = this.parentElement;
+        todolist.removeChild(parentLiElement);
+        var key = parentLiElement.getAttribute("key");
+        deleteTask(key);
+      }
+}
+      firebaseRoot.on('child_added', function (snapshot) {
+        var task = snapshot.val();
+        addNewTask(task.name, task.priority)
+      })
+      firebaseRoot.on('child_removed', function (snapshot) {
+        var key = snapshot.key();
+        var taskElement = document.querySelector("[key=" + key + "]");
+        todoList.removeChild(taskElement);
   });
+
+
+    newTaskButton.onclick = function (){
+      var taskName = prompt("ADD TASK")
+      number++;
+      if(taskName!=null||taskName!=" "){
+        console.log(taskName)
+          // addNewTask(taskName);
+          var task = {};
+          task.name = taskName;
+          task.priority = number;
+          task.done = false;
+          firebaseRoot.push(task);
+      }
+
+    }
+  }
   </script>
-</body>
+  </body>
 </html>
