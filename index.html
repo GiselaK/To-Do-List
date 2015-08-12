@@ -531,17 +531,17 @@
       var taskRef = new Firebase(firebaseRootUrl + key);
       taskRef.remove();
       taskArr.splice(priority,1);
-      for (var i=0;i<taskArr.length;i++){
-        taskArr[i].priority=i;
-        console.log(i)
-      }
     }
 
     function updateTask(name, priority, key) {
       deleteTask(key, priority)
+
+      for (var i=0;i<taskArr.length;i++){
+        taskArr[i].priority=i;
+        console.log(i)
+      }
       // console.log("name",name,"priority",priority,"key",key)
       beginAdding(name);
-      // taskArr=[]
 
       // addNewTask(name, priority, key)
     }
@@ -631,7 +631,7 @@
         // addNewTask(taskName);
         var task = {};
         task.name = taskName;
-        task.priority = taskArr.length+1;
+        task.priority = taskArr.length;
         task.done = false;
         firebaseRoot.push(task);
   }
