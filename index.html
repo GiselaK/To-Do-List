@@ -515,74 +515,134 @@
       </div>
     </div>
   <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script type="text/javascript">
   var firebaseRootUrl = "https://best-todo.firebaseio.com/";
-  var firebaseRoot = new Firebase(firebaseRootUrl)
+  var taskArr=[]
   var number=0;
-  function deleteTask(key) {
-   var taskURL = firebaseRootUrl + key;
-   var taskRef = new Firebase(firebaseRootUrl + key);
 
-   taskRef.remove();
- }
   window.onload = function (){
-
+    var firebaseRoot = new Firebase(firebaseRootUrl)
     var newTaskButton = document.getElementById("new-task-button")
     var todolist = document.getElementById("todo-list")
-    function addNewTask(taskName, priority) {
+    function deleteTask(key, priority) {
+      // console.log("trying")
+      var taskURL = firebaseRootUrl + key;
+      var taskRef = new Firebase(firebaseRootUrl + key);
+      taskRef.remove();
+      taskArr.splice(priority,1);
+      for (var i=0;i<taskArr;i++){
+        taskArr[i].priority=i;
+        console.log(i)
+      }
+    }
 
+    function updateTask(name, priority, key) {
+      deleteTask(key, priority)
+      // console.log("name",name,"priority",priority,"key",key)
+      beginAdding(name);
+      // taskArr=[]
+
+      // addNewTask(name, priority, key)
+    }
+
+
+
+    function addNewTask(taskName, priority, key) {
+      taskArr.push(taskName);
       if(number<priority){
         number=priority
       }
       var li = document.createElement("li");
-
+      li.setAttribute("key", key);
       var div = document.createElement("div")
+
       div.innerHTML=priority;
       li.appendChild(div);
       todolist.appendChild(li)
 
       var span = document.createElement("span")
       span.innerHTML = taskName;
+      span.id = "div_" + new Date().getTime().toString();
+      span.onclick = function () {
+        // var content=span.innerHTML;
+        var text= document.createElement("input")
+        li.appendChild(text);
+        if(!(span.innerHTML==="")){
+          span.innerHTML=""
+          // console.log("deleteing")
+        }
+        $(document).keypress(function(e) {
+          if(e.which == 13) {
+            span.innerHTML=text.value;
+            // if(text.parentNode===null){
+            var isDone = span.id.checked;
+            var line = span.id.parentElement;
+            var key = li.getAttribute("key")
+            // console.log(" key:",key,"isdone:",isDone)
+            updateTask(span.innerHTML,priority,key);
+            // li.removeChild(text)
+
+            // }
+
+          }
+        });
+        }
+      //   span.onchange = function () {
+      //
+      // }
+
+
+        // console.log("ayy lma")
+
+
       li.appendChild(span);
+
 
       var img = document.createElement('img');
       img.src = "http://i.imgur.com/BtLxCD6.png"
       img.setAttribute("class","delete");
-      li.appendChild(img)
-
       img.onclick = function() {
         var parentLiElement = this.parentElement;
-        todolist.removeChild(parentLiElement);
         var key = parentLiElement.getAttribute("key");
-        deleteTask(key);
+        // todolist.removeChild(parentLiElement);
+        // console.log(key)
+        deleteTask(key, priority);
       }
+      li.appendChild(img)
 }
       firebaseRoot.on('child_added', function (snapshot) {
+        // console.log("added")
         var task = snapshot.val();
-        addNewTask(task.name, task.priority)
+        // taskArr.push(task);
+        addNewTask(task.name, task.priority, snapshot.key())
       })
+
       firebaseRoot.on('child_removed', function (snapshot) {
+        // console.log("deletedlegit")
         var key = snapshot.key();
         var taskElement = document.querySelector("[key=" + key + "]");
-        todoList.removeChild(taskElement);
+        todolist.removeChild(taskElement);
   });
-
-
+  function beginAdding(taskName){
+    // number++;
+    if(taskName!=null||taskName!=" "){
+      // taskArr.push(task);
+        // addNewTask(taskName);
+        var task = {};
+        task.name = taskName;
+        task.priority = taskArr.length;
+        task.done = false;
+        firebaseRoot.push(task);
+  }
+}
     newTaskButton.onclick = function (){
       var taskName = prompt("ADD TASK")
-      number++;
-      if(taskName!=null||taskName!=" "){
-        console.log(taskName)
-          // addNewTask(taskName);
-          var task = {};
-          task.name = taskName;
-          task.priority = number;
-          task.done = false;
-          firebaseRoot.push(task);
-      }
+      beginAdding(taskName);
+  }
+
 
     }
-  }
   </script>
   </body>
 </html>
