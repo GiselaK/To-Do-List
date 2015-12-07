@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial scale=1">
+    <title></title>
+    <link rel="stylesheet" href="main.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+    <div class="container">
+      <div class="todo">
+        <ul class="todo-controls">
+          <li>
+            <span class="icon-add" id="new-task-button">Add</span>
+          </li>
+          <li class="right">
+            <span class="icon-settings"> Settings
+            </span>
+          </li>
+        </ul>
+        <ul id="todo-list">
+        </ul>
+      </div>
+    </div>
+  <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+  <script type="text/javascript">
+  var firebaseRootUrl = "https://best-todo.firebaseio.com/";
+  var firebaseRoot = new Firebase(firebaseRootUrl)
+  var number=0;
+  function deleteTask(key) {
+   var taskURL = firebaseRootUrl + key;
+   var taskRef = new Firebase(firebaseRootUrl + key);
+
+   taskRef.remove();
+ }
+  window.onload = function (){
+
+    var newTaskButton = document.getElementById("new-task-button")
+    var todolist = document.getElementById("todo-list")
+    function addNewTask(taskName, priority) {
+
+      if(number<priority){
+        number=priority
+      }
+      var li = document.createElement("li");
+
+      var div = document.createElement("div")
+      div.innerHTML=priority;
+      li.appendChild(div);
+      todolist.appendChild(li)
+
+      var span = document.createElement("span")
+      span.innerHTML = taskName;
+      li.appendChild(span);
+
+      var img = document.createElement('img');
+      img.src = "http://i.imgur.com/BtLxCD6.png"
+      img.setAttribute("class","delete");
+      li.appendChild(img)
+
+      img.onclick = function() {
+        var parentLiElement = this.parentElement;
+        todolist.removeChild(parentLiElement);
+        var key = parentLiElement.getAttribute("key");
+        deleteTask(key);
+      }
+}
+      firebaseRoot.on('child_added', function (snapshot) {
+        var task = snapshot.val();
+        addNewTask(task.name, task.priority)
+      })
+      firebaseRoot.on('child_removed', function (snapshot) {
+        var key = snapshot.key();
+        var taskElement = document.querySelector("[key=" + key + "]");
+        todoList.removeChild(taskElement);
+  });
+
+
+    newTaskButton.onclick = function (){
+      var taskName = prompt("ADD TASK")
+      number++;
+      if(taskName!=null||taskName!=" "){
+        console.log(taskName)
+          // addNewTask(taskName);
+          var task = {};
+          task.name = taskName;
+          task.priority = number;
+          task.done = false;
+          firebaseRoot.push(task);
+      }
+
+    }
+  }
+  </script>
+  </body>
+</html>
